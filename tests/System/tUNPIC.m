@@ -10,8 +10,8 @@ classdef tUNPIC < matlab.uitest.TestCase
         function addParentFolderPath(~)
             currentDir = pwd;
             disp(currentDir);
-            currentPath = split(currentDir,["\","/"]);
-            disp(currentDir);
+            currentPath = split(string(currentDir),["\","/"]);
+            disp(currentPath);
             parentPath = currentPath(1:end-2);
             disp(parentPath);
             addpath(fullfile(parentPath{:}));
