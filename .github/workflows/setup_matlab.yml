@@ -15,6 +15,7 @@ jobs:
       - name: Run tests and generate artifacts
         uses: matlab-actions/run-tests@v2
         with:
+          startup-options: -nojvm -logfile output.log
           source-folder: .
           select-by-folder: tests
           strict: true

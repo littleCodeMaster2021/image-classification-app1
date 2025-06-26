@@ -35,6 +35,8 @@ classdef tUNPIC < matlab.uitest.TestCase
 
         function launchApp(test)
             test.App = UNPIC(test.TrainedNet.trainedNet, test.ImdsVal);
+            test.assertThat(@() test.App.UNPICUIFigure.Visible, iEventually(iIsEqualTo(matlab.lang.OnOffSwitchState.on)), ...
+                'UNPICUIFigure should be visible.');
             test.addTeardown(@delete,test.App)
         end
     end
@@ -288,7 +290,7 @@ classdef tUNPIC < matlab.uitest.TestCase
             test.choose(test.App.tSNEChooseLayerDropDown, 'data');
             test.type(test.App.tSNEIncludeEverySpinner, 3);
             test.press(test.App.tSNEUpdateTableButton);
-            
+
             % Verify that 3 true classes get included
             test.verifyEqual(sum(cellfun(@(x) x == 1, test.App.tSNETable.DisplayData(:,2))), 3);
 
@@ -322,10 +324,6 @@ end
 % constraints
 function constraint = iEventually(varargin)
 constraint = matlab.unittest.constraints.Eventually(varargin{:});
-end
-
-function constraint = iIsNotEmpty()
-constraint = ~matlab.unittest.constraints.IsEmpty();
 end
 
 function constraint = iScreenshot(varargin)
