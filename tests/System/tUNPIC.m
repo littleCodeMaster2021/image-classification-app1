@@ -9,9 +9,13 @@ classdef tUNPIC < matlab.uitest.TestCase
     methods (TestClassSetup)
         function addParentFolderPath(~)
             currentDir = pwd;
+            disp(currentDir);
             currentPath = split(currentDir,["\","/"]);
+            disp(currentDir);
             parentPath = currentPath(1:end-2);
+            disp(parentPath);
             addpath(fullfile(parentPath{:}));
+            disp(fullfile(parentPath{:}));
         end
 
         function loadAppData(test)
