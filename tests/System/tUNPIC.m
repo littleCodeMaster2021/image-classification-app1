@@ -12,9 +12,9 @@ classdef tUNPIC < matlab.uitest.TestCase
             disp(currentDir);
             currentPath = split(string(currentDir),["\","/"]);
             disp(currentPath);
-            parentPath = currentPath(1:end-2);
+            parentPath = currentPath(1:end-3);
             disp(parentPath);
-            addpath(fullfile(parentPath{:}));
+            addpath(genpath(fullfile(parentPath{:})));
             disp(fullfile(parentPath{:}));
         end
 
