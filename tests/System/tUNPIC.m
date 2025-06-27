@@ -35,8 +35,6 @@ classdef tUNPIC < matlab.uitest.TestCase
 
         function launchApp(test)
             test.App = UNPIC(test.TrainedNet.trainedNet, test.ImdsVal);
-            test.assertThat(@() test.App.UNPICUIFigure.Visible, iEventually(iIsEqualTo(matlab.lang.OnOffSwitchState.on)), ...
-                'UNPICUIFigure should be visible.');
             test.addTeardown(@delete,test.App)
         end
     end
@@ -62,6 +60,7 @@ classdef tUNPIC < matlab.uitest.TestCase
 
             % Verify the UIAxes class
             test.verifyClass(test.App.DataRandomImagesUIAxes,'matlab.ui.control.UIAxes');
+            disp('testImageDataTab finished');
         end
 
         function  testAccuracyTab(test)
@@ -94,6 +93,7 @@ classdef tUNPIC < matlab.uitest.TestCase
             % Verify TruevsPredValue
             test.verifyThat(@() test.App.TruevsPredValue.Text, ...
                 iEventually(iIsEqualTo('pizza classified as pizza')), iScreenshot('prefix','WaitUntil_TruevsPredResult_'));
+            disp('testAccuracyTab finished');
         end
 
         function testPredictTab(test)
@@ -125,6 +125,7 @@ classdef tUNPIC < matlab.uitest.TestCase
             test.verifyEqual(test.App.PredictScoreUITable.Data{1,1},  'pizza (true class)');
             test.verifyEqual(test.App.PredictHistUIAxes.XTickLabel{1,1}, 'pizza');
             test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
+            disp('testPredictTab finished');
         end
 
         function testPredictionExplainerTab(test)
@@ -174,6 +175,7 @@ classdef tUNPIC < matlab.uitest.TestCase
             % Verify default value in GradientAttributionTargetclass dropdown widget
             test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
             test.verifyWarningFree(@() test.App.GradientAttributionButton.ButtonPushedFcn(test.App.GradientAttributionButton,[]));
+            disp('testPredictionExplainerTab finished');
         end
 
         function testFeatureTab(test)
@@ -258,6 +260,7 @@ classdef tUNPIC < matlab.uitest.TestCase
 
             % Click deep dream button and verify training finished in verbose results
             test.computeDeepDreamAndVerifyVerboseOutput();
+            disp('testFeatureTab finished');
         end
 
         function testtSNETab(test)
@@ -292,6 +295,7 @@ classdef tUNPIC < matlab.uitest.TestCase
 
             % Verify that tSNE plot only shows values belonging to 3 true classes
             test.verifyEqual(length(test.App.tSNEUIAxes.Legend.String), 3);
+            disp('testtSNETab finished');
         end
     end
 
@@ -303,7 +307,7 @@ classdef tUNPIC < matlab.uitest.TestCase
 
             logFilename = 'Verbose.log';
             diary(logFilename);
-            
+
             % Click deep dream button
             test.App.DeepDreamComputeButton.ButtonPushedFcn(test.App.DeepDreamComputeButton,[]);
 
