@@ -81,9 +81,6 @@ classdef tUNPIC < matlab.uitest.TestCase
             % Compute Confusion Matrix
             test.App.ConfusionMatrixButton.ButtonPushedFcn(test.App.ConfusionMatrixButton,[]);
 
-            % Verify a ConfusionMatrixChart is displayed
-           % test.verifyClass(test.App.ConfusionMatrixPanel.Children,'mlearnlib.graphics.chart.ConfusionMatrixChart');
-
             % Switch to True vs Predict Class tab
             test.App.AccuracyTabGroup.SelectedTab = test.App.TruevsPredTab;
 
@@ -158,7 +155,7 @@ classdef tUNPIC < matlab.uitest.TestCase
             % Verify that random image class default value is pizza
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, 'pizza');
 
-            test.verifyWarningFree(@() test.press(test.App.OcclusionButton));
+            test.verifyWarningFree(@() test.App.OcclusionButton.ButtonPushedFcn(test.App.OcclusionButton,[]));
 
             test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
 
@@ -169,14 +166,14 @@ classdef tUNPIC < matlab.uitest.TestCase
             test.verifyEqual(test.App.GradCAMTargetclassDropDown.Value,  'pizza');
             test.verifyEqual(test.App.GradCAMFeatureMapDropDown.Value,  'inception_5b-output');
 
-            test.verifyWarningFree(@() test.press(test.App.GradCAMButton))
+            test.verifyWarningFree(@() test.App.GradCAMButton.ButtonPushedFcn(test.App.GradCAMButton,[]));
 
             % Switch to GradientAttributionTab
             test.App.ExplainerTabGroup.SelectedTab = test.App.GradientAttributionTab;
 
             % Verify default value in GradientAttributionTargetclass dropdown widget
             test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
-            test.verifyWarningFree(@() test.press(test.App.GradientAttributionButton));
+            test.verifyWarningFree(@() test.App.GradientAttributionButton.ButtonPushedFcn(test.App.GradientAttributionButton,[]));
         end
 
         function testFeatureTab(test)
@@ -306,8 +303,10 @@ classdef tUNPIC < matlab.uitest.TestCase
 
             logFilename = 'Verbose.log';
             diary(logFilename);
+            
             % Click deep dream button
-            test.press(test.App.DeepDreamComputeButton);
+            test.App.DeepDreamComputeButton.ButtonPushedFcn(test.App.DeepDreamComputeButton,[]);
+
             diary off;
             logFile = fileread(logFilename);
             test.verifyTrue(contains(logFile, ...
