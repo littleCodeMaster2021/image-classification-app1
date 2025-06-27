@@ -44,26 +44,20 @@ classdef tUNPIC < matlab.uitest.TestCase
             % Choose Image Data tab
             test.App.MainTabGroup.SelectedTab = test.App.ImageDataTab;
 
-             disp('1');
-
             % % Verify that the tab has the expected title
             test.verifyEqual( ...
                 test.App.ImageDataTab.Title,'Image Data');
-             disp('2');
 
             test.verifyEqual(test.App.DataNumObsValue.Text,  num2str(length(test.ImdsVal.Labels)));
-             disp('3');
             test.verifyEqual(test.App.DataNumClassesValue.Text,  num2str(length(categories(test.ImdsVal.Labels))));
-               disp('4');
             test.verifyEqual(size(test.App.DataClassTable.Data), [length(categories(test.ImdsVal.Labels)) 2]);
 
-               disp('5');
             % Set DataNumObsToShow value as 16
             test.triggerValueChangedCallback(test.App.DataNumObsToShowSpinner, 16);
-      disp('6');
+
             % Update image and ensure it is warning free
             test.verifyWarningFree(@() test.App.updateImages());
-   disp('7');
+            
             % Verify the UIAxes class
             test.verifyClass(test.App.DataRandomImagesUIAxes,'matlab.ui.control.UIAxes');
             disp('testImageDataTab finishes running!');
