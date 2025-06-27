@@ -60,7 +60,7 @@ classdef tUNPIC < matlab.uitest.TestCase
 
             % Verify the UIAxes class
             test.verifyClass(test.App.DataRandomImagesUIAxes,'matlab.ui.control.UIAxes');
-            disp('testImageDataTab finished');
+            disp('testImageDataTab finishes running!');
         end
 
         function  testAccuracyTab(test)
@@ -74,8 +74,7 @@ classdef tUNPIC < matlab.uitest.TestCase
             test.App.AccuracyButton.ButtonPushedFcn(test.App.AccuracyButton,[]);
 
             % Verify the accuracy table having correct format of data
-            test.verifyThat(@() size(test.App.AccuracyTable.Data), ...
-                iEventually(iIsEqualTo([length(categories(test.ImdsVal.Labels)) 2])), iScreenshot('prefix','AccuracyTable_'));
+            test.verifyEqual(size(test.App.AccuracyTable.Data), [length(categories(test.ImdsVal.Labels)) 2]);
 
             % Compute Confusion Matrix
             test.App.ConfusionMatrixButton.ButtonPushedFcn(test.App.ConfusionMatrixButton,[]);
@@ -91,9 +90,8 @@ classdef tUNPIC < matlab.uitest.TestCase
             test.App.TruevsPredRandomImageButton.ButtonPushedFcn(test.App.TruevsPredRandomImageButton,[]);
 
             % Verify TruevsPredValue
-            test.verifyThat(@() test.App.TruevsPredValue.Text, ...
-                iEventually(iIsEqualTo('pizza classified as pizza')), iScreenshot('prefix','WaitUntil_TruevsPredResult_'));
-            disp('testAccuracyTab finished');
+            test.verifyEqual(test.App.TruevsPredValue.Text, 'pizza classified as pizza');
+            disp('testAccuracyTab finishes running!');
         end
 
         function testPredictTab(test)
@@ -119,13 +117,12 @@ classdef tUNPIC < matlab.uitest.TestCase
             test.triggerValueChangedCallback(test.App.PredictRandomImageClassDropDown, 'pizza');
 
             % Verify data in PredictScoreUITable, y-axis label of PredictHistUIAxes and PredictImageValue
-            test.verifyThat(@()  size(test.App.PredictScoreUITable.Data), ...
-                iEventually(iIsEqualTo([length(categories(test.ImdsVal.Labels)) 2])), iScreenshot('prefix','PredictScoreUITable_'));
+            test.verifyEqual(size(test.App.PredictScoreUITable.Data), [length(categories(test.ImdsVal.Labels)) 2]);
 
             test.verifyEqual(test.App.PredictScoreUITable.Data{1,1},  'pizza (true class)');
             test.verifyEqual(test.App.PredictHistUIAxes.XTickLabel{1,1}, 'pizza');
             test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
-            disp('testPredictTab finished');
+            disp('testPredictTab finishes running!');
         end
 
         function testPredictionExplainerTab(test)
@@ -175,7 +172,7 @@ classdef tUNPIC < matlab.uitest.TestCase
             % Verify default value in GradientAttributionTargetclass dropdown widget
             test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
             test.verifyWarningFree(@() test.App.GradientAttributionButton.ButtonPushedFcn(test.App.GradientAttributionButton,[]));
-            disp('testPredictionExplainerTab finished');
+            disp('testPredictionExplainerTab finishes running!');
         end
 
         function testFeatureTab(test)
@@ -260,7 +257,7 @@ classdef tUNPIC < matlab.uitest.TestCase
 
             % Click deep dream button and verify training finished in verbose results
             test.computeDeepDreamAndVerifyVerboseOutput();
-            disp('testFeatureTab finished');
+            disp('testFeatureTab finishes running!');
         end
 
         function testtSNETab(test)
@@ -277,8 +274,7 @@ classdef tUNPIC < matlab.uitest.TestCase
                 test.App.tSNEIncludeEverySpinner.Value, 5);
 
             % Verify the tSNETable size is 9 by 2
-            test.verifyThat(@() size(test.App.tSNETable.Data), ...
-                iEventually(iIsEqualTo([length(categories(test.ImdsVal.Labels)) 2])), iScreenshot('prefix','tSNETable_'));
+            test.verifyEqual(size(test.App.tSNETable.Data), [length(categories(test.ImdsVal.Labels)) 2]);
             test.verifyTrue(all(cellfun(@(x) x, test.App.tSNETable.DisplayData(:,2))))
 
             % Choose data layer and update tSNEIncludeEvery spinner value and table
@@ -295,7 +291,7 @@ classdef tUNPIC < matlab.uitest.TestCase
 
             % Verify that tSNE plot only shows values belonging to 3 true classes
             test.verifyEqual(length(test.App.tSNEUIAxes.Legend.String), 3);
-            disp('testtSNETab finished');
+            disp('testtSNETab finishes running!');
         end
     end
 
@@ -333,18 +329,6 @@ classdef tUNPIC < matlab.uitest.TestCase
 end
 
 % constraints
-function constraint = iEventually(varargin)
-constraint = matlab.unittest.constraints.Eventually(varargin{:});
-end
-
-function constraint = iScreenshot(varargin)
-constraint = matlab.unittest.diagnostics.ScreenshotDiagnostic(varargin{:});
-end
-
-function constraint = iIsEqualTo(varargin)
-constraint = matlab.unittest.constraints.IsEqualTo(varargin{:});
-end
-
 function fixture = iWorkingFolderFixture(varargin)
 fixture = matlab.unittest.fixtures.WorkingFolderFixture(varargin{:});
 end
