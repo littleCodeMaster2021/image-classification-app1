@@ -76,6 +76,7 @@ classdef tExample < matlab.uitest.TestCase
                 test.App.AccuracyTab.Title,'Accuracy');
             disp('9');
             % Compute Network Accuracy
+
             %test.pushButton(test.App.AccuracyButton);
             disp('10');
             % Verify the accuracy table having correct format of data
