@@ -4,6 +4,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         ImdsVal
         TrainedNet
         DataDir
+        IsHeadless = true; %Set this property to True if UI display is available.
     end
 
     methods (TestClassSetup)
@@ -35,13 +36,14 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
         function launchApp(test)
             test.App = UNPIC(test.TrainedNet.trainedNet, test.ImdsVal);
+            % test.App.IsHeadless = false; % 
             test.addTeardown(@delete,test.App)
         end
     end
 
     methods (Test)
         function testImageDataTab(test)
-            test.assumeTrue(test.App.IsHeadless, ...
+            test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
 
             % Choose Image Data tab
@@ -64,7 +66,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function  testAccuracyTab(test)
-            test.assumeTrue(test.App.IsHeadless, ...
+            test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require GUI launched mode, and please run it locally.');
 
             % Choose Accuracy tab
@@ -83,7 +85,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Compute Confusion Matrix
             test.press(test.App.ConfusionMatrixButton)
 
-            test.verifyClass( test.App.ConfusionMatrixPanel.Children,'mlearnlib.graphics.chart.ConfusionMatrixChart');
+            test.verifyClass(test.App.ConfusionMatrixPanel.Children,'mlearnlib.graphics.chart.ConfusionMatrixChart');
 
 
             % Switch to True vs Predict Class tab
@@ -102,7 +104,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testPredictTab(test)
-            test.assumeTrue(test.App.IsHeadless, ...
+            test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose PredictTab
             test.choose(test.App.PredictTab);
@@ -139,7 +141,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testPredictionExplainerTab(test)
-            test.assumeTrue(test.App.IsHeadless, ...
+            test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose PredictTab
             test.choose(test.App.PredictionExplainerTab);
@@ -194,7 +196,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testFeatureTab(test)
-            test.assumeTrue(test.App.IsHeadless, ...
+            test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose FeaturesTab
             test.choose(test.App.FeaturesTab);
@@ -279,7 +281,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testtSNETab(test)
-            test.assumeTrue(test.App.IsHeadless, ...
+            test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose t-SNE Tab
             test.choose(test.App.tSNETab);
