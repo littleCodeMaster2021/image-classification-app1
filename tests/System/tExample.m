@@ -296,13 +296,11 @@ classdef tExample < matlab.uitest.TestCase
             disp('73');
             % Click tSNEUpdateTableButton
             test.pushButton(test.App.tSNEUpdateTableButton);
-            pause(2);
             % Verify that 3 true classes get included
             test.verifyEqual(sum(cellfun(@(x) x == 1, test.App.tSNETable.DisplayData(:,2))), 3);
 
             % Click compute t-SNE button
             test.pushButton(test.App.tSNEButton);
-            pause(2);
             % Verify that tSNE plot only shows values belonging to 3 true classes
             test.verifyEqual(length(test.App.tSNEUIAxes.Legend.String), 3);
             disp('testtSNETab finishes running!');

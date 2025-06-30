@@ -11,7 +11,6 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             currentDir = pwd;
             currentPath = split(string(currentDir),["\","/"]);
             parentPath = currentPath(1:end-2);
-            addpath(fullfile(parentPath{:}));
             addpath(genpath(fullfile(parentPath{:})));
         end
 
