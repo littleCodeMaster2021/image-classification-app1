@@ -98,7 +98,6 @@ classdef TSNEPlotter < handle
             
             % Display in a new figure and axes, unless an axes is provided.
             if isempty(this.ImageDisplayAxes)
-
                 figure = figure('Visible', 'off');
                 ax = axes(figure);
             else

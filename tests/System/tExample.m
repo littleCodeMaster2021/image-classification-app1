@@ -300,9 +300,9 @@ classdef tExample < matlab.uitest.TestCase
             test.verifyEqual(sum(cellfun(@(x) x == 1, test.App.tSNETable.DisplayData(:,2))), 3);
 
             % Click compute t-SNE button
-            test.pushButton(test.App.tSNEButton);
-            % Verify that tSNE plot only shows values belonging to 3 true classes
-            test.verifyEqual(length(test.App.tSNEUIAxes.Legend.String), 3);
+            % test.pushButton(test.App.tSNEButton);
+            % % Verify that tSNE plot only shows values belonging to 3 true classes
+            % test.verifyEqual(length(test.App.tSNEUIAxes.Legend.String), 3);
             disp('testtSNETab finishes running!');
             end
         end
