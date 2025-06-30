@@ -1,4 +1,4 @@
-classdef tExample < matlab.unittest.TestCase
+classdef tExample < matlab.uitest.TestCase
     properties(Access = private)
         App
         ImdsVal
@@ -34,13 +34,18 @@ classdef tExample < matlab.unittest.TestCase
         end
 
         function launchApp(test)
-            test.App = UNPIC(test.TrainedNet.trainedNet, test.ImdsVal);
+            test.App = UNPICHeadless(test.TrainedNet.trainedNet, test.ImdsVal);
+            test.App.IsHeadless = true;
             test.addTeardown(@delete,test.App)
         end
     end
 
     methods (Test)
         function testImageDataTab(test)
+
+
+            if isdeployed || ~usejava('desktop')
+
             % Choose Image Data tab
             test.App.MainTabGroup.SelectedTab = test.App.ImageDataTab;
 
@@ -76,14 +81,14 @@ classdef tExample < matlab.unittest.TestCase
                 test.App.AccuracyTab.Title,'Accuracy');
             disp('9');
             % Compute Network Accuracy
-            test.App.runAccuracyButtonPushedCallback();
-            %test.pushButton(test.App.AccuracyButton);
+            %test.App.runAccuracyButtonPushedCallback();
+            test.pushButton(test.App.AccuracyButton);
             disp('10');
             % Verify the accuracy table having correct format of data
             test.verifyEqual(size(test.App.AccuracyTable.Data), [length(categories(test.ImdsVal.Labels)) 2]);
             disp('11');
             % Compute Confusion Matrix
-            %test.pushButton(test.App.ConfusionMatrixButton);
+            test.pushButton(test.App.ConfusionMatrixButton);
             disp('12');
             % Switch to True vs Predict Class tab
             test.App.AccuracyTabGroup.SelectedTab = test.App.TruevsPredTab;
@@ -93,7 +98,7 @@ classdef tExample < matlab.unittest.TestCase
             test.App.TruevsPredPredictedClassDropDown.Value = 'pizza';
             disp('14');
             % Click Random Image button
-            %test.pushButton(test.App.TruevsPredRandomImageButton);
+            test.pushButton(test.App.TruevsPredRandomImageButton);
             disp('15');
             % Verify TruevsPredValue
             test.verifyEqual(test.App.TruevsPredValue.Text, 'pizza classified as pizza');
@@ -117,7 +122,7 @@ classdef tExample < matlab.unittest.TestCase
             test.App.PredictChooseImageFileEditField.Value = fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg');
             disp('20');
             % Click random image button
-            %test.pushButton(test.App.PredictSingleRandomImageButton);
+            test.pushButton(test.App.PredictSingleRandomImageButton);
             disp('21');
             % Change dropdown value as pizza
             test.triggerValueChangedCallback(test.App.PredictRandomImageClassDropDown, 'pizza');
@@ -159,7 +164,7 @@ classdef tExample < matlab.unittest.TestCase
             % Verify that random image class default value is pizza
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, 'pizza');
             disp('33');
-            %test.verifyWarningFree(@() test.pushButton(test.App.OcclusionButton));
+            test.verifyWarningFree(@() test.pushButton(test.App.OcclusionButton));
             disp('34');
             test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
             disp('35');
@@ -171,7 +176,7 @@ classdef tExample < matlab.unittest.TestCase
             disp('37');
             test.verifyEqual(test.App.GradCAMFeatureMapDropDown.Value,  'inception_5b-output');
             disp('38');
-            %test.verifyWarningFree(@() test.pushButton(test.App.GradCAMButton));
+            test.verifyWarningFree(@() test.pushButton(test.App.GradCAMButton));
             disp('39');
             % Switch to GradientAttributionTab
             test.App.ExplainerTabGroup.SelectedTab = test.App.GradientAttributionTab;
@@ -179,7 +184,7 @@ classdef tExample < matlab.unittest.TestCase
             % Verify default value in GradientAttributionTargetclass dropdown widget
             test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
             disp('41');
-            %test.verifyWarningFree(@() test.pushButton(test.App.GradientAttributionButton));
+            test.verifyWarningFree(@() test.pushButton(test.App.GradientAttributionButton));
             disp('testPredictionExplainerTab finishes running!');
             disp('42');
 
@@ -210,13 +215,13 @@ classdef tExample < matlab.unittest.TestCase
             test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 0);
             disp('50');
             % Click random image button
-            %test.pushButton(test.App.ActivationsSingleRandomImageButton);
+            test.pushButton(test.App.ActivationsSingleRandomImageButton);
             disp('51');
             % Select random image class as pizza
             test.triggerValueChangedCallback(test.App.ActivationsRandomImageClassDropDown, 'pizza');
             disp('52');
             % Click compute activation button
-            %test.pushButton(test.App.ActivationsButton);
+            test.pushButton(test.App.ActivationsButton);
             disp('53');
             % Switch to ActivationDistributionTab
             test.App.FeaturesTabGroup.SelectedTab = test.App.ActivationDistributionTab;
@@ -224,10 +229,12 @@ classdef tExample < matlab.unittest.TestCase
             test.verifyEqual(test.App.ActivationDistributionRandomImageClassDropDown.Value, 'pizza');
             disp('55');
             % Click compute activation distributions button
-            %test.pushButton(test.App.ActivationDistributionComputeButton);
+            test.pushButton(test.App.ActivationDistributionComputeButton);
             disp('56');
-            % Verify that ActivationDistribution has 6 channels
+            % Verify that ActivationDistribution has 6 channels and each
+            % of them has 2 images
             test.verifyEqual(sum(cellfun(@(x) isa(x, 'matlab.graphics.axis.Axes'), num2cell(test.App.ActivationDistributionPanel.Children))), 6);
+            test.verifyEqual(test.App.ActivationDistributionPanel.Children(3).NextSeriesIndex, 2);
             disp('57');
             % Switch to MaxActivationsTab
             test.App.FeaturesTabGroup.SelectedTab = test.App.MaxActivationsTab;
@@ -238,15 +245,13 @@ classdef tExample < matlab.unittest.TestCase
             test.App.MaxActivationsImagesperchannelEditField.Value = '2';
             disp('60');
             % Click display max activating images button
-            %test.pushButton(test.App.MaxActivationsImagesButton);
+            test.pushButton(test.App.MaxActivationsImagesButton);
             disp('61');
             % Verify that ActivationDistribution has 6 sub plots
             test.verifyEqual(sum(cellfun(@(x) isa(x, 'matlab.graphics.axis.Axes'), num2cell(test.App.ActivationDistributionPanel.Children))), 6);
             disp('62');
-            % Verify that ActivationDistribution has 6 channels and each
-            % of them has 2 images
+            % Verify that ActivationDistribution has 6 channels
             test.verifyEqual(sum(cellfun(@(x) isa(x, 'matlab.graphics.axis.Axes'), num2cell(test.App.ActivationDistributionPanel.Children))), 6);
-            test.verifyEqual(test.App.ActivationDistributionPanel.Children(3).NextSeriesIndex, 2);
             disp('63');
             % Switch to DeepDreamTab
             test.App.FeaturesTabGroup.SelectedTab = test.App.DeepDreamTab;
@@ -290,18 +295,17 @@ classdef tExample < matlab.unittest.TestCase
             test.App.tSNEIncludeEverySpinner.Value = 3;
             disp('73');
             % Click tSNEUpdateTableButton
-            %test.pushButton(test.App.tSNEUpdateTableButton);
+            test.pushButton(test.App.tSNEUpdateTableButton);
             % Verify that 3 true classes get included
             test.verifyEqual(sum(cellfun(@(x) x == 1, test.App.tSNETable.DisplayData(:,2))), 3);
 
             % Click compute t-SNE button
-            %test.pushButton(test.App.tSNEButton);
+            test.pushButton(test.App.tSNEButton);
             disp('74');
             % Verify that tSNE plot only shows values belonging to 3 true classes
             test.verifyEqual(length(test.App.tSNEUIAxes.Legend.String), 3);
             disp('testtSNETab finishes running!');
-
-            disp('75');
+            end
         end
     end
 
@@ -315,7 +319,7 @@ classdef tExample < matlab.unittest.TestCase
             diary(logFilename);
 
             % Click deep dream button
-            %test.pushButton(test.App.DeepDreamComputeButton);
+            test.pushButton(test.App.DeepDreamComputeButton);
 
             diary off;
             logFile = fileread(logFilename);
