@@ -42,8 +42,8 @@ classdef tUNPICHeadless < matlab.uitest.TestCase
             % Resize the images to the input size of the pretrained network.
             inputSize = net.Layers(1).InputSize;
 
-            augimdsTrain = augmentedImageDatastore(inputSize,imdsTrain);
-            augimdsVal = augmentedImageDatastore(inputSize,imdsVal);
+            augimdsTrain = augmentedImageDatastore(inputSize,test.ImdsTrain);
+            augimdsVal = augmentedImageDatastore(inputSize,test.ImdsVal);
 
             %Define Network Architecture
             lgraph = layerGraph(net);
