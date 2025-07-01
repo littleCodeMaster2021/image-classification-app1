@@ -121,7 +121,6 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
-            pause(1);
             % Click random image button
             test.press(test.App.PredictSingleRandomImageButton);
 
@@ -156,10 +155,9 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-
-            pause(1);
+            
             % Click random image button
-            test.press(test.App.ExplainerSingleRandomImageButton)
+            test.press(test.App.ExplainerSingleRandomImageButton);
 
             % Select random image class as pizza
             test.choose(test.App.ExplainerRandomImageClassDropDown, 'pizza');
