@@ -30,12 +30,64 @@ classdef tUNPICHeadless < matlab.uitest.TestCase
                 'LabelSource','foldernames');
 
             [test.ImdsTrain,test.ImdsVal] = splitEachLabel(imds,0.8,0.2,'randomized');
+        end
 
-            test.TrainedNet = load('trainedNet_Food.mat');
+        function trainNet(test)
+            % Load a pretrained GoogLeNet network
+            fprintf('Load a pretrained GoogLeNet network!\n');
+            net = googlenet;
+
+            % Resize the images to the input size of the pretrained network.
+            fprintf('Resize the images to the input size of the pretrained network!\n');
+            inputSize = net.Layers(1).InputSize;
+
+            augimdsTrain = augmentedImageDatastore(inputSize,test.ImdsTrain);
+            augimdsVal = augmentedImageDatastore(inputSize,test.ImdsVal);
+
+            %Define Network Architecture
+            fprintf('Define Network Architecture!\n');
+            lgraph = layerGraph(net);
+
+            %Define new layers specific to this data set.
+            fprintf('Define new layers specific to this data set!\n');
+            numClasses = numel(categories(test.ImdsTrain.Labels));
+            newLearnableLayer = fullyConnectedLayer(numClasses, ...
+                'Name','new_fc', ...
+                'WeightLearnRateFactor',10, ...
+                'BiasLearnRateFactor',10);
+
+            newClassLayer = classificationLayer('Name','new_classoutput');
+
+            % Replace the current layers with the new layers.
+            fprintf('Replace the current layers with the new layers!\n');
+            lgraph = replaceLayer(lgraph,'loss3-classifier',newLearnableLayer);
+            lgraph = replaceLayer(lgraph,'output',newClassLayer);
+
+            %Train Network
+            fprintf('Train Network!\n');
+            valFrequencyEpochs = 1;
+            miniBatchSize = 50;
+
+            numObservations = augimdsTrain.NumObservations;
+            numIterationsPerEpoch = floor(numObservations/miniBatchSize);
+            valFrequency = valFrequencyEpochs * numIterationsPerEpoch;
+
+            fprintf('Start Training!\n');
+            options = trainingOptions('sgdm', ...
+                'MaxEpochs',10, ...
+                'InitialLearnRate',1e-4, ...
+                'Shuffle','every-epoch', ...
+                'ValidationData',augimdsVal, ...
+                'ValidationFrequency',valFrequency, ...
+                'Verbose',false, ...
+                'Plots','none');
+
+            test.TrainedNet = trainNetwork(augimdsTrain,lgraph,options);    
+            fprintf('Finish Training!\n');
         end
 
         function launchApp(test)
-            test.App = UNPICHeadless(test.TrainedNet.trainedNet, test.ImdsVal);
+            test.App = UNPICHeadless(test.TrainedNet, test.ImdsVal);
             test.assertThat(@() test.App.UNPICUIFigure.Visible, iEventually(iIsEqualTo(matlab.lang.OnOffSwitchState.off)), ...
                 'UNPICUIFigure should not be visible.');
             test.App.IsHeadless = true;
