@@ -4,7 +4,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         ImdsVal
         TrainedNet
         DataDir
-        IsHeadless = true; %Set this property to True if UI display is available.
+        %IsHeadless = true; %Set this property to True if UI display is available.
     end
 
     methods (TestClassSetup)
@@ -43,8 +43,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
     methods (Test)
         function testImageDataTab(test)
-            test.assumeFalse(test.IsHeadless, ...
-                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+            % test.assumeFalse(test.IsHeadless, ...
+            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
 
             % Choose Image Data tab
             test.choose(test.App.ImageDataTab);
@@ -66,8 +66,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function  testAccuracyTab(test)
-            test.assumeFalse(test.IsHeadless, ...
-                'This set of tests require GUI launched mode, and please run it locally.');
+            % test.assumeFalse(test.IsHeadless, ...
+            %     'This set of tests require GUI launched mode, and please run it locally.');
 
             % Choose Accuracy tab
             test.choose(test.App.AccuracyTab);
@@ -104,8 +104,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testPredictTab(test)
-            test.assumeFalse(test.IsHeadless, ...
-                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+            % test.assumeFalse(test.IsHeadless, ...
+            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose PredictTab
             test.choose(test.App.PredictTab);
             % % Verify that the tab has the expected title
@@ -141,8 +141,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testPredictionExplainerTab(test)
-            test.assumeFalse(test.IsHeadless, ...
-                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+            % test.assumeFalse(test.IsHeadless, ...
+            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose PredictTab
             test.choose(test.App.PredictionExplainerTab);
             % Verify that the tab has the expected title
@@ -196,8 +196,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testFeatureTab(test)
-            test.assumeFalse(test.IsHeadless, ...
-                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+            % test.assumeFalse(test.IsHeadless, ...
+            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose FeaturesTab
             test.choose(test.App.FeaturesTab);
             % Verify that the tab has the expected title
@@ -281,8 +281,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testtSNETab(test)
-            test.assumeFalse(test.IsHeadless, ...
-                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+            % test.assumeFalse(test.IsHeadless, ...
+            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose t-SNE Tab
             test.choose(test.App.tSNETab);
             % Verify that the tab has the expected title

@@ -13,8 +13,19 @@ jobs:
           products: Deep_Learning_Toolbox Statistics_and_Machine_Learning_Toolbox Parallel_Computing_Toolbox Deep_Learning_Toolbox_Model_for_GoogLeNet_Network
           release: R2024b
           cache: true
+      - name: Install Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+      - name: Start Xvfb
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 &
+          export DISPLAY=:99 &
+          echo "Xvfb started on display :99"
       - name: Run tests and generate artifacts
         uses: matlab-actions/run-tests@v2
+        env:
+           DISPLAY: :99
         with:
           source-folder: .
           select-by-folder: tests
