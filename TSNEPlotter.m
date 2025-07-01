@@ -98,7 +98,6 @@ classdef TSNEPlotter < handle
             
             % Display in a new figure and axes, unless an axes is provided.
             if isempty(this.ImageDisplayAxes)
-                figure = figure('Visible', 'off');
                 ax = axes(figure);
             else
                 ax = this.ImageDisplayAxes;
@@ -106,19 +105,11 @@ classdef TSNEPlotter < handle
             
             img = imread(imgFilename);
             imgTitle = iImageTitle(imgFilename, trueClass, predClass);
-            title(ax, imgTitle, "Interpreter", "none");
+            
+            imshow(img, "Parent", ax);
+            title(ax, imgTitle, "Interpreter", "none")
             ax.ActivePositionProperty = 'outerposition';
-            % Display the image using imagesc
-            imagesc(ax, img);
-            axis(ax, 'image');
-            axis(ax, 'off');
-            colormap(ax, gray); % or another colormap if needed
 
-            % Save the figure to a file
-            saveas(figure, 'output_image.png');
-
-            % Close the figure
-            close(figure);
         end
     end
 end

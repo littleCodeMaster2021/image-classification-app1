@@ -121,6 +121,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
+            pause(1);
             % Click random image button
             test.press(test.App.PredictSingleRandomImageButton);
 
@@ -156,6 +157,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
+            pause(1);
             % Click random image button
             test.press(test.App.ExplainerSingleRandomImageButton)
 
@@ -218,7 +220,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Type the image path to ActivationsChooseImageFileEditField
             test.type(test.App.ActivationsChooseImageFileEditField,  fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-
+            pause(1);
             % Verify that ActivationDistribution is empty
             test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 0);
 
