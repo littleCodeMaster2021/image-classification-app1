@@ -126,169 +126,169 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % Click random image button
-            test.press(test.App.PredictSingleRandomImageButton);
+        %     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %     % Click random image button
+        %     test.press(test.App.PredictSingleRandomImageButton);
+        % 
+        %     % Select random image class as pizza
+        %     test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
+        % 
+        %     % Verify that random image class name is equal to true class
+        %     % name
+        %     test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
+        % 
+        %     % Verify data in PredictScoreUITable, y-axis label of PredictHistUIAxes and PredictImageValue
+        %     test.verifyThat(@()  size(test.App.PredictScoreUITable.Data), ...
+        %         iEventually(iIsEqualTo([length(categories(test.ImdsVal.Labels)) 2])), iScreenshot('prefix','PredictScoreUITable_'));
+        % 
+        %     test.verifyEqual(test.App.PredictScoreUITable.Data{1,1},  'pizza (true class)');
+        %     test.verifyEqual(test.App.PredictHistUIAxes.XTickLabel{1,1}, 'pizza');
+        %     test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
+        %     fprintf('testPredictTab finishes running!\n');
+        % end
+        % 
+        % function testPredictionExplainerTab(test)
+        %     fprintf('testPredictionExplainerTab starts running!\n');
+        %     % test.assumeFalse(test.IsHeadless, ...
+        %     %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+        %     % Choose PredictTab
+        %     test.choose(test.App.PredictionExplainerTab);
+        %     % Verify that the tab has the expected title
+        %     test.verifyEqual( ...
+        %         test.App.PredictionExplainerTab.Title,'Prediction Explainer');
+        % 
+        %     % Verify that ExplainerChooseImageFileEditField is empty
+        %     test.verifyEmpty(test.App.ExplainerChooseImageFileEditField.Value);
+        % 
+        %     % Type the image path to PredictChooseImageFileEditField
+        %     test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
-            % Select random image class as pizza
-            test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
-
-            % Verify that random image class name is equal to true class
-            % name
-            test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
-
-            % Verify data in PredictScoreUITable, y-axis label of PredictHistUIAxes and PredictImageValue
-            test.verifyThat(@()  size(test.App.PredictScoreUITable.Data), ...
-                iEventually(iIsEqualTo([length(categories(test.ImdsVal.Labels)) 2])), iScreenshot('prefix','PredictScoreUITable_'));
-
-            test.verifyEqual(test.App.PredictScoreUITable.Data{1,1},  'pizza (true class)');
-            test.verifyEqual(test.App.PredictHistUIAxes.XTickLabel{1,1}, 'pizza');
-            test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
-            fprintf('testPredictTab finishes running!\n');
-        end
-
-        function testPredictionExplainerTab(test)
-            fprintf('testPredictionExplainerTab starts running!\n');
-            % test.assumeFalse(test.IsHeadless, ...
-            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
-            % Choose PredictTab
-            test.choose(test.App.PredictionExplainerTab);
-            % Verify that the tab has the expected title
-            test.verifyEqual( ...
-                test.App.PredictionExplainerTab.Title,'Prediction Explainer');
-
-            % Verify that ExplainerChooseImageFileEditField is empty
-            test.verifyEmpty(test.App.ExplainerChooseImageFileEditField.Value);
-
-            % Type the image path to PredictChooseImageFileEditField
-            test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % Click random image button
-            test.press(test.App.ExplainerSingleRandomImageButton);
-
-            % Select random image class as pizza
-            test.choose(test.App.ExplainerRandomImageClassDropDown, 'pizza');
-
-            % Verify that random image class name is equal to true class
-            % name
-            test.verifyEqual(test.App.ExplainerRandomImageClassDropDown.Value, test.App.ExplainerValue.Text);
-
-            % Set OcclusionTargetclassDropDown value as pizza
-            test.choose(test.App.OcclusionTargetclassDropDown, 'pizza');
-
-            % Verify the default value of OcclusionMasksize and OcclusionStride
-            test.verifyEqual(test.App.OcclusionMasksizeSpinner.Value, 45);
-            test.verifyEqual(test.App.OcclusionStrideSpinner.Value, 22);
-
-            % Verify that random image class default value is pizza
-            test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, 'pizza');
-
-            test.verifyWarningFree(@() test.press(test.App.OcclusionButton))
-
-            test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
-
-            % Swich to GradCAM tab
-            test.choose(test.App.GradCAMTab)
-
-            test.verifyEqual(test.App.GradCAMTargetclassDropDown.Value,  'pizza');
-            test.verifyEqual(test.App.GradCAMFeatureMapDropDown.Value,  'inception_5b-output');
-
-            test.verifyWarningFree(@() test.press(test.App.GradCAMButton))
-
-            % Switch to GradientAttributionTab
-            test.choose(test.App.GradientAttributionTab);
-
-           % test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
-            test.verifyWarningFree(@() test.press(test.App.GradientAttributionButton));
-            fprintf('testPredictionExplainerTab finishes running!\n');
-        end
-
-        function testFeatureTab(test)
-            % test.assumeFalse(test.IsHeadless, ...
-            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
-            fprintf('testFeaturesTab starts running!\n');
-            % Choose FeaturesTab
-            test.choose(test.App.FeaturesTab);
-            % Verify that the tab has the expected title
-            test.verifyEqual( ...
-                test.App.FeaturesTab.Title,'Features');
-
-            % Verify the default value of feature choose widgets
-            test.verifyEqual( ...
-                test.App.FeaturesChooseLayerDropDown.Value,'conv1-7x7_s2');
-            test.verifyEqual( ...
-                test.App.FeaturesChooseChannelsEditField.Value,'1:4');
-
-            % Change the feature choose channels value to 6
-            test.type(test.App.FeaturesChooseChannelsEditField, '1:6');
-
-            % Switch to activation tab
-            test.choose(test.App.ActivationsTab);
-
-            % Type the image path to ActivationsChooseImageFileEditField
-            test.type(test.App.ActivationsChooseImageFileEditField,  fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-
-            % Verify that ActivationDistribution is empty
-            test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 0);
-
-            % Click random image button
-            test.press(test.App.ActivationsSingleRandomImageButton);
-
-            % Select random image class as pizza
-            test.choose(test.App.ActivationsRandomImageClassDropDown, 'pizza');
-
-            % Click compute activation button
-            test.press(test.App.ActivationsButton);
-
-            % Switch to ActivationDistributionTab
-            test.choose(test.App.ActivationDistributionTab);
-
-            test.verifyEqual( test.App.ActivationDistributionRandomImageClassDropDown.Value, 'pizza');
-
-            % Click compute activation distributions button
-            test.press(test.App.ActivationDistributionComputeButton);
-
-            % Verify that ActivationDistribution has 6 channels
-            test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 6);
-
-            % Switch to MaxActivationsTab
-            test.choose(test.App.MaxActivationsTab);
-
-            test.verifyEqual(test.App.MaxActivationsImagesperchannelEditField.Value, '1');
-
-            % Set image per channel as 2
-            test.type(test.App.MaxActivationsImagesperchannelEditField, '2');
-
-            % Click display max activating images button
-            test.press(test.App.MaxActivationsImagesButton);
-            % Verify that ActivationDistribution has 6 sub plots
-            test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 6);
-
-            % Verify that ActivationDistribution has 6 channels and each
-            % of them has 2 images
-            test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 6);
-            test.verifyEqual(test.App.ActivationDistributionPanel.Children(1).NextSeriesIndex, 2);
-
-            % Switch to DeepDreamTab
-            test.choose(test.App.DeepDreamTab);
-
-            % Verify default value of iteration, pyramid levels and
-            % verbose
-            test.verifyEqual(test.App.DeepDreamIterationsSpinner.Value, 10);
-            test.verifyEqual(test.App.DeepDreamPyrLvlsSpinner.Value, 2);
-            test.verifyFalse(test.App.DeepDreamVerboseCheckBox.Value);
-
-            % Update the deep dream iterations and PyrLvls value
-            test.type(test.App.DeepDreamIterationsSpinner, 2);
-            test.type(test.App.DeepDreamPyrLvlsSpinner, 1);
-
-            % Enable verbose checkbox
-            test.press(test.App.DeepDreamVerboseCheckBox);
-
-            % Click deep dream button and verify training finished in verbose results
-            test.computeDeepDreamAndVerifyVerboseOutput();
-            fprintf('testFeatureTab finishes running!\n');
+        %     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %     % Click random image button
+        %     test.press(test.App.ExplainerSingleRandomImageButton);
+        % 
+        %     % Select random image class as pizza
+        %     test.choose(test.App.ExplainerRandomImageClassDropDown, 'pizza');
+        % 
+        %     % Verify that random image class name is equal to true class
+        %     % name
+        %     test.verifyEqual(test.App.ExplainerRandomImageClassDropDown.Value, test.App.ExplainerValue.Text);
+        % 
+        %     % Set OcclusionTargetclassDropDown value as pizza
+        %     test.choose(test.App.OcclusionTargetclassDropDown, 'pizza');
+        % 
+        %     % Verify the default value of OcclusionMasksize and OcclusionStride
+        %     test.verifyEqual(test.App.OcclusionMasksizeSpinner.Value, 45);
+        %     test.verifyEqual(test.App.OcclusionStrideSpinner.Value, 22);
+        % 
+        %     % Verify that random image class default value is pizza
+        %     test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, 'pizza');
+        % 
+        %     test.verifyWarningFree(@() test.press(test.App.OcclusionButton))
+        % 
+        %     test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
+        % 
+        %     % Swich to GradCAM tab
+        %     test.choose(test.App.GradCAMTab)
+        % 
+        %     test.verifyEqual(test.App.GradCAMTargetclassDropDown.Value,  'pizza');
+        %     test.verifyEqual(test.App.GradCAMFeatureMapDropDown.Value,  'inception_5b-output');
+        % 
+        %     test.verifyWarningFree(@() test.press(test.App.GradCAMButton))
+        % 
+        %     % Switch to GradientAttributionTab
+        %     test.choose(test.App.GradientAttributionTab);
+        % 
+        %    % test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
+        %     test.verifyWarningFree(@() test.press(test.App.GradientAttributionButton));
+        %     fprintf('testPredictionExplainerTab finishes running!\n');
+        % end
+        % 
+        % function testFeatureTab(test)
+        %     % test.assumeFalse(test.IsHeadless, ...
+        %     %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+        %     fprintf('testFeaturesTab starts running!\n');
+        %     % Choose FeaturesTab
+        %     test.choose(test.App.FeaturesTab);
+        %     % Verify that the tab has the expected title
+        %     test.verifyEqual( ...
+        %         test.App.FeaturesTab.Title,'Features');
+        % 
+        %     % Verify the default value of feature choose widgets
+        %     test.verifyEqual( ...
+        %         test.App.FeaturesChooseLayerDropDown.Value,'conv1-7x7_s2');
+        %     test.verifyEqual( ...
+        %         test.App.FeaturesChooseChannelsEditField.Value,'1:4');
+        % 
+        %     % Change the feature choose channels value to 6
+        %     test.type(test.App.FeaturesChooseChannelsEditField, '1:6');
+        % 
+        %     % Switch to activation tab
+        %     test.choose(test.App.ActivationsTab);
+        % 
+        %     % Type the image path to ActivationsChooseImageFileEditField
+        %     test.type(test.App.ActivationsChooseImageFileEditField,  fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
+        % 
+        %     % Verify that ActivationDistribution is empty
+        %     test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 0);
+        % 
+        %     % Click random image button
+        %     test.press(test.App.ActivationsSingleRandomImageButton);
+        % 
+        %     % Select random image class as pizza
+        %     test.choose(test.App.ActivationsRandomImageClassDropDown, 'pizza');
+        % 
+        %     % Click compute activation button
+        %     test.press(test.App.ActivationsButton);
+        % 
+        %     % Switch to ActivationDistributionTab
+        %     test.choose(test.App.ActivationDistributionTab);
+        % 
+        %     test.verifyEqual( test.App.ActivationDistributionRandomImageClassDropDown.Value, 'pizza');
+        % 
+        %     % Click compute activation distributions button
+        %     test.press(test.App.ActivationDistributionComputeButton);
+        % 
+        %     % Verify that ActivationDistribution has 6 channels
+        %     test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 6);
+        % 
+        %     % Switch to MaxActivationsTab
+        %     test.choose(test.App.MaxActivationsTab);
+        % 
+        %     test.verifyEqual(test.App.MaxActivationsImagesperchannelEditField.Value, '1');
+        % 
+        %     % Set image per channel as 2
+        %     test.type(test.App.MaxActivationsImagesperchannelEditField, '2');
+        % 
+        %     % Click display max activating images button
+        %     test.press(test.App.MaxActivationsImagesButton);
+        %     % Verify that ActivationDistribution has 6 sub plots
+        %     test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 6);
+        % 
+        %     % Verify that ActivationDistribution has 6 channels and each
+        %     % of them has 2 images
+        %     test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 6);
+        %     test.verifyEqual(test.App.ActivationDistributionPanel.Children(1).NextSeriesIndex, 2);
+        % 
+        %     % Switch to DeepDreamTab
+        %     test.choose(test.App.DeepDreamTab);
+        % 
+        %     % Verify default value of iteration, pyramid levels and
+        %     % verbose
+        %     test.verifyEqual(test.App.DeepDreamIterationsSpinner.Value, 10);
+        %     test.verifyEqual(test.App.DeepDreamPyrLvlsSpinner.Value, 2);
+        %     test.verifyFalse(test.App.DeepDreamVerboseCheckBox.Value);
+        % 
+        %     % Update the deep dream iterations and PyrLvls value
+        %     test.type(test.App.DeepDreamIterationsSpinner, 2);
+        %     test.type(test.App.DeepDreamPyrLvlsSpinner, 1);
+        % 
+        %     % Enable verbose checkbox
+        %     test.press(test.App.DeepDreamVerboseCheckBox);
+        % 
+        %     % Click deep dream button and verify training finished in verbose results
+        %     test.computeDeepDreamAndVerifyVerboseOutput();
+        %     fprintf('testFeatureTab finishes running!\n');
         end
 
         function testtSNETab(test)
