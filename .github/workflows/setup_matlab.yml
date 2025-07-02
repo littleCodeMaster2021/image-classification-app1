@@ -27,6 +27,20 @@ jobs:
           vncserver :1 -geometry 1920x1080 -depth 24
           sleep 5
           echo "vncserver started on display :1"
+      - name: Download and start ngrok tunnel for VNC
+        run: |
+          wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip
+          unzip ngrok-stable-linux-amd64.zip
+          sudo mv ngrok /usr/local/bin
+          nohup ngrok tcp 5901 > /dev/null &
+          sleep 5
+      - name: Print ngrok public URL for VNC
+        run: |
+          curl -s http://127.0.0.1:4040/api/tunnels > tunnels.json
+          cat tunnels.json
+          # Extract the public_url
+          NGROK_URL=$(jq -r '.tunnels[0].public_url' tunnels.json)
+          echo "🔗 Connect your VNC client to: $NGROK_URL"
       - name: Run tests and generate artifacts
         uses: matlab-actions/run-tests@v2
         env:
@@ -39,6 +53,10 @@ jobs:
           test-results-pdf: test-results/results.pdf
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
+      - name: Pause for manual debugging (10 minutes)
+        run: |
+          echo "Pausing for 5 minutes. Connect with VNC to debug the session."
+          sleep 300
       - name: Upload test artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -52,4 +70,4 @@ jobs:
           file: code-coverage/coverage.xml
       - name: Stop VNC server
         if: always()
-        run: vnvserver -kill :1
+        run: vncserver -kill :1
