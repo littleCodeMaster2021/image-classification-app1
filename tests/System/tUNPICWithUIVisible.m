@@ -123,15 +123,20 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEmpty(test.App.PredictImageValue.Text);
             test.verifyEmpty(test.App.PredictChooseImageFileEditField.Value);
 
+            pause(5)
+
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
+            pause(5)
 
-        %     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %     % Click random image button
-        %     test.press(test.App.PredictSingleRandomImageButton);
-        % 
-        %     % Select random image class as pizza
-        %     test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % Click random image button
+            test.press(test.App.PredictSingleRandomImageButton);
+             pause(5)
+
+
+            % Select random image class as pizza
+            test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
         % 
         %     % Verify that random image class name is equal to true class
         %     % name
