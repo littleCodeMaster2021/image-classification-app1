@@ -32,6 +32,10 @@ jobs:
           wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip
           unzip ngrok-stable-linux-amd64.zip
           sudo mv ngrok /usr/local/bin
+      - name: Configure ngrok authtoken
+        run: ngrok config add-authtoken ${{ secrets.NGROK_AUTHTOKEN }}
+      - name: Start ngrok tunnel for VNC
+        run: |
           nohup ngrok tcp 5901 > /dev/null &
           sleep 5
       - name: Print ngrok public URL for VNC
