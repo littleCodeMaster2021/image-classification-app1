@@ -45,6 +45,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         function testImageDataTab(test)
             % test.assumeFalse(test.IsHeadless, ...
             %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+            pause(30);
 
             fprintf('testImageDataTab starts running!\n');
             % Choose Image Data tab
@@ -63,7 +64,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.type(test.App.DataNumObsToShowSpinner, 4)
             test.verifyEqual(test.App.DataNumObsToShowSpinner.Value, 4);
 
-            test.verifyWarningFree(@() test.App.updateImages());
+            test.verifyWarningFree(@() test.press(test.App.DataRandomImagesButton));
 
             fprintf('testImageDataTab finishes running!\n');
         end
@@ -88,7 +89,6 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Compute Confusion Matrix
             test.press(test.App.ConfusionMatrixButton)
-
             test.verifyClass(test.App.ConfusionMatrixPanel.Children,'mlearnlib.graphics.chart.ConfusionMatrixChart');
 
 
@@ -131,21 +131,9 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Select random image class as pizza
             test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
 
-             pause(5)
+            % Verify PredictRandomImageClassDropDown value is equal to true class
+            % name
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
-
-            % % Click random image button
-            % test.press(test.App.PredictSingleRandomImageButton);
-            % pause(5)
-            % 
-
-            % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % % Select random image class as pizza
-            % test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
-            % pause(5)
-            % % Verify that random image class name is equal to true class
-            % % name
-            % test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
 
             % Verify data in PredictScoreUITable, y-axis label of PredictHistUIAxes and PredictImageValue
             test.verifyThat(@()  size(test.App.PredictScoreUITable.Data), ...
@@ -170,17 +158,6 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Verify that ExplainerChooseImageFileEditField is empty
             test.verifyEmpty(test.App.ExplainerChooseImageFileEditField.Value);
 
-            % % Type the image path to PredictChooseImageFileEditField
-            % test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-            %
-            % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % % Click random image button
-            % test.press(test.App.ExplainerSingleRandomImageButton);
-            %
-            % % Select random image class as pizza
-            % test.choose(test.App.ExplainerRandomImageClassDropDown, 'pizza');
-
-
             % Verify that random image class name is equal to true class
             % name
             test.verifyEqual(test.App.ExplainerRandomImageClassDropDown.Value, test.App.ExplainerValue.Text);
@@ -200,12 +177,12 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
 
             % Swich to GradCAM tab
-            test.choose(test.App.GradCAMTab)
+            test.choose(test.App.GradCAMTab);
 
             test.verifyEqual(test.App.GradCAMTargetclassDropDown.Value,  'pizza');
             test.verifyEqual(test.App.GradCAMFeatureMapDropDown.Value,  'inception_5b-output');
 
-            test.verifyWarningFree(@() test.press(test.App.GradCAMButton))
+            test.verifyWarningFree(@() test.press(test.App.GradCAMButton));
 
             % Switch to GradientAttributionTab
             test.choose(test.App.GradientAttributionTab);
@@ -237,17 +214,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Switch to activation tab
             test.choose(test.App.ActivationsTab);
 
-            % % Type the image path to ActivationsChooseImageFileEditField
-            % test.type(test.App.ActivationsChooseImageFileEditField,  fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-
             % Verify that ActivationDistribution is empty
             test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 0);
-
-            % Click random image button
-            %test.press(test.App.ActivationsSingleRandomImageButton);
-
-            % Select random image class as pizza
-            test.choose(test.App.ActivationsRandomImageClassDropDown, 'pizza');
 
             % Click compute activation button
             test.press(test.App.ActivationsButton);
