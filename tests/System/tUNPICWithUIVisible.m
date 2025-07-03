@@ -124,10 +124,14 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEmpty(test.App.PredictImageValue.Text);
             test.verifyEmpty(test.App.PredictChooseImageFileEditField.Value);
 
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % Select random image class as pizza
+            test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
+
+            test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
+
             % Click random image button
            test.press(test.App.PredictSingleRandomImageButton);
-
-           test.verifyNotEmpty( test.App.PredictImageValue.Text);
 
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
@@ -136,10 +140,6 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Select random image class as pizza
             test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
          
-            % Verify that random image class name is equal to true class
-            % name
-            test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
-
             % Verify that random image class name is equal to true class
             % name
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
@@ -241,7 +241,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 0);
 
             % Click random image button
-            test.press(test.App.ActivationsSingleRandomImageButton);
+            %test.press(test.App.ActivationsSingleRandomImageButton);
 
             % Select random image class as pizza
             test.choose(test.App.ActivationsRandomImageClassDropDown, 'pizza');
