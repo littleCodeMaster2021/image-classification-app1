@@ -36,7 +36,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
         function launchApp(test)
             test.App = UNPIC(test.TrainedNet.trainedNet, test.ImdsVal);
-            % test.App.IsHeadless = false; % 
+            % test.App.IsHeadless = false; %
             test.addTeardown(@delete,test.App)
         end
     end
@@ -71,9 +71,9 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         function  testAccuracyTab(test)
             % test.assumeFalse(test.IsHeadless, ...
             %     'This set of tests require GUI launched mode, and please run it locally.');
-             fprintf('testAccuracyTab starts running!\n');
-           
-             % Choose Accuracy tab
+            fprintf('testAccuracyTab starts running!\n');
+
+            % Choose Accuracy tab
             test.choose(test.App.AccuracyTab);
             % % Verify that the tab has the expected title
             test.verifyEqual( ...
@@ -128,18 +128,20 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Select random image class as pizza
             test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
 
+             pause(5)
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
 
             % Click random image button
-           test.press(test.App.PredictSingleRandomImageButton);
+            test.press(test.App.PredictSingleRandomImageButton);
+            pause(5)
 
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-
+            pause(5)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % Select random image class as pizza
             test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
-         
+            pause(5)
             % Verify that random image class name is equal to true class
             % name
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
@@ -169,11 +171,11 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % % Type the image path to PredictChooseImageFileEditField
             % test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-            % 
+            %
             % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % % Click random image button
             % test.press(test.App.ExplainerSingleRandomImageButton);
-            % 
+            %
             % % Select random image class as pizza
             % test.choose(test.App.ExplainerRandomImageClassDropDown, 'pizza');
 
@@ -207,7 +209,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Switch to GradientAttributionTab
             test.choose(test.App.GradientAttributionTab);
 
-           % test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
+            % test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
             test.verifyWarningFree(@() test.press(test.App.GradientAttributionButton));
             fprintf('testPredictionExplainerTab finishes running!\n');
         end
