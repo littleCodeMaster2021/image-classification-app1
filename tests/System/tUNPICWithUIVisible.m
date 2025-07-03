@@ -36,7 +36,6 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
         function launchApp(test)
             test.App = UNPIC(test.TrainedNet.trainedNet, test.ImdsVal);
-            % test.App.IsHeadless = false; % 
             matlab.uitest.unlock(test.App.UNPICUIFigure);
             test.addTeardown(@delete,test.App)
         end
