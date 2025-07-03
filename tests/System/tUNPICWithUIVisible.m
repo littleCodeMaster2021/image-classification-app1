@@ -43,7 +43,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
     methods (Test)
         function testImageDataTab(test)
-            pause(180);
+            disp('Start testImageDataTab')
+            pause(30);
             test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
 
@@ -105,6 +106,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testPredictTab(test)
+            disp('Start testPredictTab');
             test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose PredictTab
@@ -119,20 +121,22 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEmpty(test.App.PredictImageValue.Text);
             test.verifyEmpty(test.App.PredictChooseImageFileEditField.Value);
 
+           
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
-            pause(60);
+            pause(5);
             % Click random image button
             test.press(test.App.PredictSingleRandomImageButton);
-
+            pause(5);
             % Verify that random image class name is equal to true class
             % name
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
 
             % Select random image class as pizza
             test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
-
+             
+            pause(5);
             % Verify data in PredictScoreUITable, y-axis label of PredictHistUIAxes and PredictImageValue
             test.verifyThat(@()  size(test.App.PredictScoreUITable.Data), ...
                 iEventually(iIsEqualTo([length(categories(test.ImdsVal.Labels)) 2])), iScreenshot('prefix','PredictScoreUITable_'));
