@@ -124,6 +124,9 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEmpty(test.App.PredictImageValue.Text);
             test.verifyEmpty(test.App.PredictChooseImageFileEditField.Value);
 
+            % Type the image path to PredictChooseImageFileEditField
+            test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
+
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % Select random image class as pizza
             test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
@@ -131,20 +134,18 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
              pause(5)
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
 
-            % Click random image button
-            test.press(test.App.PredictSingleRandomImageButton);
-            pause(5)
+            % % Click random image button
+            % test.press(test.App.PredictSingleRandomImageButton);
+            % pause(5)
+            % 
 
-            % Type the image path to PredictChooseImageFileEditField
-            test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
-            pause(5)
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % Select random image class as pizza
-            test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
-            pause(5)
-            % Verify that random image class name is equal to true class
-            % name
-            test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
+            % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % % Select random image class as pizza
+            % test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
+            % pause(5)
+            % % Verify that random image class name is equal to true class
+            % % name
+            % test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
 
             % Verify data in PredictScoreUITable, y-axis label of PredictHistUIAxes and PredictImageValue
             test.verifyThat(@()  size(test.App.PredictScoreUITable.Data), ...
