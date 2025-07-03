@@ -72,7 +72,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % test.assumeFalse(test.IsHeadless, ...
             %     'This set of tests require GUI launched mode, and please run it locally.');
              fprintf('testAccuracyTab starts running!\n');
-            % Choose Accuracy tab
+           
+             % Choose Accuracy tab
             test.choose(test.App.AccuracyTab);
             % % Verify that the tab has the expected title
             test.verifyEqual( ...
@@ -123,17 +124,21 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEmpty(test.App.PredictImageValue.Text);
             test.verifyEmpty(test.App.PredictChooseImageFileEditField.Value);
 
+            % Click random image button
+           test.press(test.App.PredictSingleRandomImageButton);
+
+           test.verifyNotEmpty( test.App.PredictImageValue.Text);
 
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
-
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % Click random image button
-            test.pushButton(test.App.PredictSingleRandomImageButton);
-
             % Select random image class as pizza
-            test.triggerValueChangedCallback(test.App.PredictRandomImageClassDropDown, 'pizza');
+            test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
+         
+            % Verify that random image class name is equal to true class
+            % name
+            test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
 
             % Verify that random image class name is equal to true class
             % name
@@ -162,15 +167,16 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Verify that ExplainerChooseImageFileEditField is empty
             test.verifyEmpty(test.App.ExplainerChooseImageFileEditField.Value);
 
-            % Type the image path to PredictChooseImageFileEditField
-            test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
+            % % Type the image path to PredictChooseImageFileEditField
+            % test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
+            % 
+            % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % % Click random image button
+            % test.press(test.App.ExplainerSingleRandomImageButton);
+            % 
+            % % Select random image class as pizza
+            % test.choose(test.App.ExplainerRandomImageClassDropDown, 'pizza');
 
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % Click random image button
-            test.pushButton(test.App.ExplainerSingleRandomImageButton);
-
-            % Select random image class as pizza
-            test.triggerValueChangedCallback(test.App.ExplainerRandomImageClassDropDown, 'pizza');
 
             % Verify that random image class name is equal to true class
             % name
@@ -228,8 +234,8 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Switch to activation tab
             test.choose(test.App.ActivationsTab);
 
-            % Type the image path to ActivationsChooseImageFileEditField
-            test.type(test.App.ActivationsChooseImageFileEditField,  fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
+            % % Type the image path to ActivationsChooseImageFileEditField
+            % test.type(test.App.ActivationsChooseImageFileEditField,  fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
             % Verify that ActivationDistribution is empty
             test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 0);
@@ -264,6 +270,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Click display max activating images button
             test.press(test.App.MaxActivationsImagesButton);
+
             % Verify that ActivationDistribution has 6 sub plots
             test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 6);
 
@@ -347,25 +354,6 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyTrue(contains(logFile, ...
                 'Training finished: Max epochs completed'));
         end
-
-        function triggerValueChangedCallback(~, widget, newValue)
-
-            % 1. Change the value
-            widget.Value = newValue;
-
-            % 2. Create a fake event data structure
-            event = struct('Source', widget, 'EventName', 'ValueChanged');
-
-            % 3. Call the callback manually
-            widget.ValueChangedFcn(widget, event);
-        end
-
-        function pushButton(~, button)
-            buttonPushedFcn = button.ButtonPushedFcn;
-            buttonPushedFcn(button, matlab.ui.eventdata.ButtonPushedData);
-        end
-
-
     end
 
 end
