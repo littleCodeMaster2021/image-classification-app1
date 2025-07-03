@@ -4,7 +4,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         ImdsVal
         TrainedNet
         DataDir
-        %IsHeadless = true; %Set this property to True if UI display is available.
+        IsHeadless = false; 
     end
 
     methods (TestClassSetup)
@@ -36,18 +36,18 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
         function launchApp(test)
             test.App = UNPIC(test.TrainedNet.trainedNet, test.ImdsVal);
-            % test.App.IsHeadless = false; %
+            % test.App.IsHeadless = false; % 
+            matlab.uitest.unlock(test.App.UNPICUIFigure);
             test.addTeardown(@delete,test.App)
         end
     end
 
     methods (Test)
         function testImageDataTab(test)
-            % test.assumeFalse(test.IsHeadless, ...
-            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
-            pause(30);
+            pause(180);
+            test.assumeFalse(test.IsHeadless, ...
+                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
 
-            fprintf('testImageDataTab starts running!\n');
             % Choose Image Data tab
             test.choose(test.App.ImageDataTab);
             % % Verify that the tab has the expected title
@@ -64,15 +64,12 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.type(test.App.DataNumObsToShowSpinner, 4)
             test.verifyEqual(test.App.DataNumObsToShowSpinner.Value, 4);
 
-            test.verifyWarningFree(@() test.press(test.App.DataRandomImagesButton));
-
-            fprintf('testImageDataTab finishes running!\n');
+            test.verifyWarningFree(@() test.App.updateImages());
         end
 
         function  testAccuracyTab(test)
-            % test.assumeFalse(test.IsHeadless, ...
-            %     'This set of tests require GUI launched mode, and please run it locally.');
-            fprintf('testAccuracyTab starts running!\n');
+            test.assumeFalse(test.IsHeadless, ...
+                'This set of tests require GUI launched mode, and please run it locally.');
 
             % Choose Accuracy tab
             test.choose(test.App.AccuracyTab);
@@ -89,6 +86,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Compute Confusion Matrix
             test.press(test.App.ConfusionMatrixButton)
+
             test.verifyClass(test.App.ConfusionMatrixPanel.Children,'mlearnlib.graphics.chart.ConfusionMatrixChart');
 
 
@@ -105,13 +103,11 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Verify TruevsPredValue
             test.verifyThat(@() test.App.TruevsPredValue.Text, ...
                 iEventually(iIsEqualTo('pizza classified as pizza')), iScreenshot('prefix','WaitUntil_TruevsPredResult_'));
-            fprintf('testAccuracyTab finishes running!\n');
         end
 
         function testPredictTab(test)
-            fprintf('testPredictTab starts running!\n');
-            % test.assumeFalse(test.IsHeadless, ...
-            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+            test.assumeFalse(test.IsHeadless, ...
+                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose PredictTab
             test.choose(test.App.PredictTab);
             % % Verify that the tab has the expected title
@@ -127,13 +123,16 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % Select random image class as pizza
-            test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
+            pause(60);
+            % Click random image button
+            test.press(test.App.PredictSingleRandomImageButton);
 
-            % Verify PredictRandomImageClassDropDown value is equal to true class
+            % Verify that random image class name is equal to true class
             % name
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, test.App.PredictImageValue.Text);
+
+            % Select random image class as pizza
+            test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
 
             % Verify data in PredictScoreUITable, y-axis label of PredictHistUIAxes and PredictImageValue
             test.verifyThat(@()  size(test.App.PredictScoreUITable.Data), ...
@@ -142,13 +141,11 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEqual(test.App.PredictScoreUITable.Data{1,1},  'pizza (true class)');
             test.verifyEqual(test.App.PredictHistUIAxes.XTickLabel{1,1}, 'pizza');
             test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
-            fprintf('testPredictTab finishes running!\n');
         end
 
         function testPredictionExplainerTab(test)
-            fprintf('testPredictionExplainerTab starts running!\n');
-            % test.assumeFalse(test.IsHeadless, ...
-            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
+            test.assumeFalse(test.IsHeadless, ...
+                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose PredictTab
             test.choose(test.App.PredictionExplainerTab);
             % Verify that the tab has the expected title
@@ -158,12 +155,20 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Verify that ExplainerChooseImageFileEditField is empty
             test.verifyEmpty(test.App.ExplainerChooseImageFileEditField.Value);
 
+
+            % Type the image path to PredictChooseImageFileEditField
+            test.type(test.App.ExplainerChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
+
+            % Click random image button
+            test.press(test.App.ExplainerSingleRandomImageButton)
+
+            % Select random image class as pizza
+            test.choose(test.App.ExplainerRandomImageClassDropDown, 'pizza');
+
             % Verify that random image class name is equal to true class
             % name
             test.verifyEqual(test.App.ExplainerRandomImageClassDropDown.Value, test.App.ExplainerValue.Text);
 
-            % Set OcclusionTargetclassDropDown value as pizza
-            test.choose(test.App.OcclusionTargetclassDropDown, 'pizza');
 
             % Verify the default value of OcclusionMasksize and OcclusionStride
             test.verifyEqual(test.App.OcclusionMasksizeSpinner.Value, 45);
@@ -172,30 +177,30 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Verify that random image class default value is pizza
             test.verifyEqual(test.App.PredictRandomImageClassDropDown.Value, 'pizza');
 
+
             test.verifyWarningFree(@() test.press(test.App.OcclusionButton))
 
             test.verifyEqual(test.App.PredictImageValue.Text,  'pizza');
 
+
             % Swich to GradCAM tab
-            test.choose(test.App.GradCAMTab);
+            test.choose(test.App.GradCAMTab)
 
             test.verifyEqual(test.App.GradCAMTargetclassDropDown.Value,  'pizza');
             test.verifyEqual(test.App.GradCAMFeatureMapDropDown.Value,  'inception_5b-output');
 
-            test.verifyWarningFree(@() test.press(test.App.GradCAMButton));
+            test.verifyWarningFree(@() test.press(test.App.GradCAMButton))
 
             % Switch to GradientAttributionTab
             test.choose(test.App.GradientAttributionTab);
 
-            % test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
+            test.verifyEqual(test.App.GradientAttributionTargetclassDropDown.Value,  'pizza');
             test.verifyWarningFree(@() test.press(test.App.GradientAttributionButton));
-            fprintf('testPredictionExplainerTab finishes running!\n');
         end
 
         function testFeatureTab(test)
-            % test.assumeFalse(test.IsHeadless, ...
-            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
-            fprintf('testFeaturesTab starts running!\n');
+            test.assumeFalse(test.IsHeadless, ...
+                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose FeaturesTab
             test.choose(test.App.FeaturesTab);
             % Verify that the tab has the expected title
@@ -214,8 +219,17 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             % Switch to activation tab
             test.choose(test.App.ActivationsTab);
 
+            % Type the image path to ActivationsChooseImageFileEditField
+            test.type(test.App.ActivationsChooseImageFileEditField,  fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
+
             % Verify that ActivationDistribution is empty
             test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 0);
+
+            % Click random image button
+            test.press(test.App.ActivationsSingleRandomImageButton);
+
+            % Select random image class as pizza
+            test.choose(test.App.ActivationsRandomImageClassDropDown, 'pizza');
 
             % Click compute activation button
             test.press(test.App.ActivationsButton);
@@ -241,7 +255,6 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Click display max activating images button
             test.press(test.App.MaxActivationsImagesButton);
-
             % Verify that ActivationDistribution has 6 sub plots
             test.verifyEqual(length(test.App.ActivationDistributionPanel.Children), 6);
 
@@ -268,13 +281,11 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Click deep dream button and verify training finished in verbose results
             test.computeDeepDreamAndVerifyVerboseOutput();
-            fprintf('testFeatureTab finishes running!\n');
         end
 
         function testtSNETab(test)
-            % test.assumeFalse(test.IsHeadless, ...
-            %     'This set of tests require UI launched mode, and please run it locally or server with UI display.');
-            fprintf('testtSNETab starts running!\n');
+            test.assumeFalse(test.IsHeadless, ...
+                'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose t-SNE Tab
             test.choose(test.App.tSNETab);
             % Verify that the tab has the expected title
@@ -305,8 +316,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Verify that tSNE plot only shows values belonging to 3 true classes
             test.verifyEqual(length(test.App.tSNEUIAxes.Legend.String), 3);
-
-            fprintf('testtSNETab finishes running!\n');
+            pause(300)
         end
     end
 
