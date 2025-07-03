@@ -56,10 +56,6 @@ jobs:
           test-results-pdf: test-results/results.pdf
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
-      - name: Pause for manual debugging (10 minutes)
-        run: |
-          echo "Pausing for 10 minutes. Connect with VNC to debug the session."
-          sleep 600
       - name: Upload test artifacts
         uses: actions/upload-artifact@v4
         with:
