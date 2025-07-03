@@ -44,7 +44,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
     methods (Test)
         function testImageDataTab(test)
             disp('Start testImageDataTab')
-            pause(30);
+            pause(40);
             test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
 
