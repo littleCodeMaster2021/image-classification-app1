@@ -44,7 +44,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
     methods (Test)
         function testImageDataTab(test)
             disp('Start testImageDataTab')
-            pause(35);
+            pause(30);
             test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
 
@@ -319,7 +319,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Verify that tSNE plot only shows values belonging to 3 true classes
             test.verifyEqual(length(test.App.tSNEUIAxes.Legend.String), 3);
-            pause(300)
+            pause(350)
         end
     end
 
