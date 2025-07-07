@@ -1,10 +1,10 @@
-classdef tUNPICWithUIVisible < matlab.uitest.TestCase
+classdef tUNPIC < matlab.uitest.TestCase
     properties(Access = private)
         App
         ImdsVal
         TrainedNet
         DataDir
-        IsHeadless = true; %Set this property to True if UI display is available.
+        IsHeadless = false; 
     end
 
     methods (TestClassSetup)
@@ -36,13 +36,14 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
         function launchApp(test)
             test.App = UNPIC(test.TrainedNet.trainedNet, test.ImdsVal);
-            % test.App.IsHeadless = false; % 
+            matlab.uitest.unlock(test.App.UNPICUIFigure);
             test.addTeardown(@delete,test.App)
         end
     end
 
     methods (Test)
         function testImageDataTab(test)
+            disp('Start testImageDataTab');
             test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
 
@@ -104,6 +105,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
         end
 
         function testPredictTab(test)
+            disp('Start testPredictTab');
             test.assumeFalse(test.IsHeadless, ...
                 'This set of tests require UI launched mode, and please run it locally or server with UI display.');
             % Choose PredictTab
@@ -118,6 +120,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
             test.verifyEmpty(test.App.PredictImageValue.Text);
             test.verifyEmpty(test.App.PredictChooseImageFileEditField.Value);
 
+           
             % Type the image path to PredictChooseImageFileEditField
             test.type(test.App.PredictChooseImageFileEditField, fullfile(test.DataDir, 'pizza', 'crop_pizza1.jpg'));
 
@@ -130,7 +133,7 @@ classdef tUNPICWithUIVisible < matlab.uitest.TestCase
 
             % Select random image class as pizza
             test.choose(test.App.PredictRandomImageClassDropDown, 'pizza');
-
+             
             % Verify data in PredictScoreUITable, y-axis label of PredictHistUIAxes and PredictImageValue
             test.verifyThat(@()  size(test.App.PredictScoreUITable.Data), ...
                 iEventually(iIsEqualTo([length(categories(test.ImdsVal.Labels)) 2])), iScreenshot('prefix','PredictScoreUITable_'));
