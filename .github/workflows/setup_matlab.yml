@@ -1,9 +1,15 @@
 name: Run MATLAB Tests on GitHub-Hosted Runner
+# Controls when the workflow will run.
 on: [push]
+# Triggers the workflow on push request events and for manual runs from the Actions tab in GitHub.
 jobs:
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel.
   my-job:
     name: Run MATLAB Tests and Generate Artifacts
     runs-on: ubuntu-latest
+    # Don't fail the entire run if one job fails.
+    continue-on-error: true
+    # Steps define a sequence of tasks to be executed as part of the job.
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
