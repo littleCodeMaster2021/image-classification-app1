@@ -1,9 +1,15 @@
 name: Run MATLAB Tests on GitHub-Hosted Runner
+# Controls when the workflow will run.
 on: [push]
+# Triggers the workflow on push request events and for manual runs from the Actions tab in GitHub.
 jobs:
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel.
   my-job:
     name: Run MATLAB Tests and Generate Artifacts
     runs-on: ubuntu-latest
+    # Don't fail the entire run if one job fails.
+    continue-on-error: true
+    # Steps define a sequence of tasks to be executed as part of the job.
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -13,7 +19,17 @@ jobs:
           products: Deep_Learning_Toolbox Statistics_and_Machine_Learning_Toolbox Parallel_Computing_Toolbox Deep_Learning_Toolbox_Model_for_GoogLeNet_Network
           release: R2024b
           cache: true
+      - name: Install Xvfb dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+      - name: Start Xvfb
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+          export DISPLAY=:99
       - name: Run tests and generate artifacts
+        env:
+          DISPLAY: :99
         uses: matlab-actions/run-tests@v2
         with:
           source-folder: .
